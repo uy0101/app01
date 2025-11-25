@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Expense Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <h1>Expense Tracker</h1>
+  
+  <input id="date" type="date">
+  <input id="amount" type="text" placeholder="Amount">
+  <select id="category"></select>
+  
+  <button id="submit">Add</button>
+  
+  <div id="expenseList"></div>
+  
+  <a id="downloadLink">Download CSV</a>
+</div>
+
+<script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('Service Worker registered'));
+}
+</script>
+</body>
+</html>
