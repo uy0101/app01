@@ -9,8 +9,13 @@ input, select, button { padding: .8rem; font-size: 1rem; }
 button { background: #2563eb; color: #fff; border: none; cursor: pointer; }
 button:hover { background: #1e40af; }
 .expense-list { list-style: none; padding: 0; margin-top: 1rem; }
+.expense-list {
+    max-height: 400px; /* o quello che preferisci */
+    overflow-y: auto;
+}
 .expense-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: .8rem; margin-bottom: .5rem; border-radius: 6px; }
 .expense-actions img { width: 24px; height: 24px; cursor: pointer; margin-left: 8px; }
 .empty-state { text-align: center; color: #666; margin-top: 1rem; }
 .app-footer { text-align: center; padding: 1rem; color: #555; }
 .app-footer a { color: #2563eb; text-decoration: none; font-weight: bold; }
+
