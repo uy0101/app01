@@ -24,7 +24,7 @@
 
   <main class="container">
     <form id="expense-form" class="expense-form">
-      <input type="number" id="amount" placeholder="Importo (€)" required>
+      <input type="number" id="amount" step="0.01" min="0.01" placeholder="Importo (€)" required>
       <input type="date" id="date" required>
       <select id="category" required></select>
       <button type="submit">Aggiungi</button>
