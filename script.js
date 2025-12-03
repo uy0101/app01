@@ -37,7 +37,7 @@ function renderExpenses() {
 
     const li=document.createElement('li');
     li.className='expense-item';
-    li.innerHTML=`<span>€${exp.amount.toFixed(2)} [${exp.category}]</span><BR /><small class="expense-date">${exp.date}</small>
+    li.innerHTML=`<span>€${exp.amount.toFixed(2)} [${exp.category}]</span><br><small class="expense-date">${exp.date}</small>
       <div class='expense-actions'>
         <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${index})'>
         <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${index})'>
