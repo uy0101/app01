@@ -92,6 +92,7 @@ form.addEventListener('submit',e=>{
   document.getElementById('edit-index').value='';
   cancelEditBtn.hidden=true;
   highlightedIndex = null;
+  submitBtn.textContent = 'Aggiungi';
   renderExpenses();
 });
 
