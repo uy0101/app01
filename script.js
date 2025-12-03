@@ -44,8 +44,9 @@ function renderExpenses() {
     
     // Evidenzia se è la riga in modifica
     if (index === highlightedIndex) {
-        li.style.backgroundColor = '#fff3cd'; // giallo chiaro
+      row.classList.add('editing');
     }
+
 
     list.appendChild(li);
   });
