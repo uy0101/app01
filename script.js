@@ -41,6 +41,12 @@ function renderExpenses() {
         <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${index})'>
         <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${index})'>
       </div>`;
+    
+    // Evidenzia se è la riga in modifica
+    if (index === highlightedIndex) {
+        li.style.backgroundColor = '#fff3cd'; // giallo chiaro
+    }
+
     list.appendChild(li);
   });
 
@@ -67,6 +73,12 @@ form.addEventListener('submit',e=>{
   }
   const category=categorySelect.value;
   const editIndex=document.getElementById('edit-index').value;
+
+  // Validazione importo > 0
+  if (isNaN(amount) || amount <= 0) {
+        alert('Inserisci un importo maggiore di zero');
+        return;
+    }
 
   if(editIndex){
     expenses[editIndex]={amount,date,category};
@@ -97,7 +109,14 @@ function editExpense(index){
   document.getElementById('date').value=exp.date;
   categorySelect.value=exp.category;
   document.getElementById('edit-index').value=index;
-  cancelEditBtn.hidden=false;
+
+  // Cambia testo pulsante
+    submitBtn.textContent = 'Modifica';
+    cancelEditBtn.hidden = false;
+
+  // Evidenzia la riga in modifica
+    highlightedIndex = index; // variabile globale
+    renderExpenses(); // aggiorna la lista con evidenziazione
 }
 
 cancelEditBtn.addEventListener('click',()=>{
