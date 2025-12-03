@@ -6,6 +6,7 @@ const cancelEditBtn = document.getElementById('cancel-edit');
 const categorySelect = document.getElementById('category');
 const exportLink = document.getElementById('export-csv');
 let highlightedIndex = null;
+let editIndex = null
 
 
 categories.forEach(cat => {
@@ -29,15 +30,20 @@ function renderExpenses() {
   let dailyTotal = 0, monthlyTotal = 0;
   const today = todayISO();
   const currentMonth = today.slice(0,7);
-
+  let n = expenses.length;
+  
   expenses.slice().reverse().forEach((exp, index) => {
   //expenses.forEach((exp,index)=>{
+    let originalIndex = n - 1 - index;  // mappa indice visualizzato -> indice nell’array originale
     if(exp.date===today) dailyTotal+=exp.amount;
     if(exp.date.startsWith(currentMonth)) monthlyTotal+=exp.amount;
 
     const li=document.createElement('li');
+    li.dataset.index = String(originalIndex);
     li.className='expense-item';
-    li.innerHTML=`<span>€${exp.amount.toFixed(2)} [${exp.category}]</span><br><small class="expense-date">${exp.date}</small>
+    li.innerHTML=`<span>€${exp.amount.toFixed(2)} [${exp.category}]
+                  </span><br>
+                  <small class="expense-date">${exp.date || ''}</small>
       <div class='expense-actions'>
         <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${index})'>
         <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${index})'>
@@ -108,10 +114,17 @@ function deleteExpense(index){
 
 function editExpense(index){
   const exp=expenses[index];
+  
+  // index è l'indice originale dell'array 'expenses'
+  editIndex = index;
+
+  const expense = expenses[index]; // carica quello giusto
   //document.getElementById('desc').value=exp.desc;
   document.getElementById('amount').value=exp.amount;
   document.getElementById('date').value=exp.date;
-  categorySelect.value=exp.category;
+  document.getElementById('category').value = expense.category;
+  //replaced by line above
+  //categorySelect.value=exp.category;
   document.getElementById('edit-index').value=index;
 
   // Cambia testo pulsante
