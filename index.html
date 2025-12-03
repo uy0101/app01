@@ -1,34 +1,45 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>Expense Tracker</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le mie spese</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-  <h1>Expense Tracker</h1>
-  
-  <input id="date" type="date">
-  <input id="amount" type="text" placeholder="Amount">
-  <select id="category"></select>
-  
-  <button id="submit">Add</button>
-  
-  <div id="expenseList"></div>
-  
-  <a id="downloadLink">Download CSV</a>
-</div>
+  <header class="app-header">
+    <h1>Le mie spese</h1>
+    <div class="totals">
+      <div class="total-card">
+        <span class="label">Oggi</span>
+        <span class="value" id="daily-total">€ 0,00</span>
+      </div>
+      <div class="total-card">
+        <span class="label">Mese</span>
+        <span class="value" id="monthly-total">€ 0,00</span>
+      </div>
+    </div>
+  </header>
 
-<script src="app.js"></script>
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-    .then(() => console.log('Service Worker registered'));
-}
-</script>
+  <main class="container">
+    <form id="expense-form" class="expense-form">
+      <input type="text" id="desc" placeholder="Descrizione" required>
+      <input type="number" id="amount" placeholder="Importo (€)" required>
+      <input type="date" id="date" required>
+      <button type="submit">Aggiungi</button>
+      <button type="button" id="cancel-edit" hidden>Annulla</button>
+      <input type="hidden" id="edit-index">
+    </form>
+
+    <ul id="expense-list" class="expense-list"></ul>
+    <p id="empty-state" class="empty-state">Nessuna spesa registrata.</p>
+  </main>
+
+  <footer class="app-footer">
+    <small>Dati salvati in LocalStorage</small>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
