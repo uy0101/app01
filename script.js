@@ -43,11 +43,21 @@ function renderExpenses() {
   document.getElementById('empty-state').style.display=expenses.length?'none':'block';
 }
 
+/ Funzione per ottenere la data di oggi in formato YYYY-MM-DD
+function todayISO() {
+   const d = new Date();
+   return d.toISOString().split('T')[0];
+}
+
 form.addEventListener('submit',e=>{
   e.preventDefault();
   const desc=document.getElementById('desc').value;
   const amount=parseFloat(document.getElementById('amount').value);
   const date=document.getElementById('date').value;
+  // Imposta la data di default se il campo è vuoto
+   if (!date.value) {
+        date.value = todayISO();
+  }
   const category=categorySelect.value;
   const editIndex=document.getElementById('edit-index').value;
 
