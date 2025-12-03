@@ -44,7 +44,7 @@ function renderExpenses() {
     
     // Evidenzia se è la riga in modifica
     if (index === highlightedIndex) {
-      row.classList.add('editing');
+      li.classList.add('editing');
     }
 
 
