@@ -27,6 +27,7 @@
       <input type="text" id="desc" placeholder="Descrizione" required>
       <input type="number" id="amount" placeholder="Importo (€)" required>
       <input type="date" id="date" required>
+      <select id="category" required></select>
       <button type="submit">Aggiungi</button>
       <button type="button" id="cancel-edit" hidden>Annulla</button>
       <input type="hidden" id="edit-index">
@@ -37,7 +38,7 @@
   </main>
 
   <footer class="app-footer">
-    <small>Dati salvati in LocalStorage</small>
+    <small>Dati salvati in LocalStorage | <a href="#" id="export-csv">Esporta CSV</a></small>
   </footer>
 
   <script src="script.js"></script>

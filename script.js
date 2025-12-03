@@ -1,7 +1,18 @@
 
+const categories = ['Food','Transport','Utilities','Other'];
 const form = document.getElementById('expense-form');
 const list = document.getElementById('expense-list');
 const cancelEditBtn = document.getElementById('cancel-edit');
+const categorySelect = document.getElementById('category');
+const exportLink = document.getElementById('export-csv');
+
+categories.forEach(cat => {
+  const opt = document.createElement('option');
+  opt.value = cat;
+  opt.textContent = cat;
+  categorySelect.appendChild(opt);
+});
+
 let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
 function todayISO() { return new Date().toISOString().split('T')[0]; }
@@ -19,7 +30,7 @@ function renderExpenses() {
 
     const li=document.createElement('li');
     li.className='expense-item';
-    li.innerHTML=`<span>${exp.desc} - €${exp.amount.toFixed(2)}</span>
+    li.innerHTML=`<span>${exp.desc} - €${exp.amount.toFixed(2)} [${exp.category}]</span>
       <div class='expense-actions'>
         <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${index})'>
         <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${index})'>
@@ -37,12 +48,13 @@ form.addEventListener('submit',e=>{
   const desc=document.getElementById('desc').value;
   const amount=parseFloat(document.getElementById('amount').value);
   const date=document.getElementById('date').value;
+  const category=categorySelect.value;
   const editIndex=document.getElementById('edit-index').value;
 
   if(editIndex){
-    expenses[editIndex]={desc,amount,date};
+    expenses[editIndex]={desc,amount,date,category};
   }else{
-    expenses.push({desc,amount,date});
+    expenses.push({desc,amount,date,category});
   }
   localStorage.setItem('expenses',JSON.stringify(expenses));
   form.reset();
@@ -66,6 +78,7 @@ function editExpense(index){
   document.getElementById('desc').value=exp.desc;
   document.getElementById('amount').value=exp.amount;
   document.getElementById('date').value=exp.date;
+  categorySelect.value=exp.category;
   document.getElementById('edit-index').value=index;
   cancelEditBtn.hidden=false;
 }
@@ -75,6 +88,24 @@ cancelEditBtn.addEventListener('click',()=>{
   document.getElementById('date').value=todayISO();
   document.getElementById('edit-index').value='';
   cancelEditBtn.hidden=true;
+});
+
+exportLink.addEventListener('click',e=>{
+  e.preventDefault();
+  if(expenses.length===0){alert('Nessuna spesa da esportare');return;}
+  let csv='Descrizione,Importo,Data,Categoria
+';
+  expenses.forEach(exp=>{
+    csv+=`${exp.desc},${exp.amount},${exp.date},${exp.category}
+`;
+  });
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='spese.csv';
+  a.click();
+  URL.revokeObjectURL(url);
 });
 
 renderExpenses();

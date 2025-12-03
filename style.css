@@ -5,10 +5,12 @@ header { background: linear-gradient(135deg,#2563eb,#10b981); color: #fff; paddi
 .total-card { background: rgba(255,255,255,0.2); padding: .5rem 1rem; border-radius: 8px; }
 .container { max-width: 600px; margin: 1rem auto; padding: 0 1rem; }
 .expense-form { display: grid; gap: .5rem; }
-input, button { padding: .8rem; font-size: 1rem; }
+input, select, button { padding: .8rem; font-size: 1rem; }
 button { background: #2563eb; color: #fff; border: none; cursor: pointer; }
 button:hover { background: #1e40af; }
 .expense-list { list-style: none; padding: 0; margin-top: 1rem; }
 .expense-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: .8rem; margin-bottom: .5rem; border-radius: 6px; }
 .expense-actions img { width: 24px; height: 24px; cursor: pointer; margin-left: 8px; }
 .empty-state { text-align: center; color: #666; margin-top: 1rem; }
+.app-footer { text-align: center; padding: 1rem; color: #555; }
+.app-footer a { color: #2563eb; text-decoration: none; font-weight: bold; }
