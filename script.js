@@ -47,6 +47,7 @@ function renderExpenses() {
   document.getElementById('daily-total').textContent='€ '+dailyTotal.toFixed(2);
   document.getElementById('monthly-total').textContent='€ '+monthlyTotal.toFixed(2);
   document.getElementById('empty-state').style.display=expenses.length?'none':'block';
+  document.getElementById('total-count').textContent =`Sono state registrate ${expenses.length} voci di spesa`;
 }
 
 // Funzione per ottenere la data di oggi in formato YYYY-MM-DD
