@@ -141,6 +141,7 @@ cancelEditBtn.addEventListener('click',()=>{
   document.getElementById('date').value=todayISO();
   document.getElementById('edit-index').value='';
   cancelEditBtn.hidden=true;
+  submitBtn.textContent = 'Aggiungi';
 });
 
 exportLink.addEventListener('click',e=>{
