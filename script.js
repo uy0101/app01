@@ -109,11 +109,9 @@ cancelEditBtn.addEventListener('click',()=>{
 exportLink.addEventListener('click',e=>{
   e.preventDefault();
   if(expenses.length===0){alert('Nessuna spesa da esportare');return;}
-  let csv='Descrizione,Importo,Data,Categoria
-';
+  let csv='Descrizione,Importo,Data,Categoria';
   expenses.forEach(exp=>{
-    csv+=`${exp.desc},${exp.amount},${exp.date},${exp.category}
-`;
+    csv+=`${exp.desc},${exp.amount},${exp.date},${exp.category}`;
   });
   const blob=new Blob([csv],{type:'text/csv'});
   const url=URL.createObjectURL(blob);
