@@ -30,13 +30,14 @@ function renderExpenses() {
   const today = todayISO();
   const currentMonth = today.slice(0,7);
 
-  expenses.forEach((exp,index)=>{
+  expenses.slice().reverse().forEach((exp, index) => {
+  //expenses.forEach((exp,index)=>{
     if(exp.date===today) dailyTotal+=exp.amount;
     if(exp.date.startsWith(currentMonth)) monthlyTotal+=exp.amount;
 
     const li=document.createElement('li');
     li.className='expense-item';
-    li.innerHTML=`<span>€${exp.amount.toFixed(2)} [${exp.category}]</span>
+    li.innerHTML=`<span>€${exp.amount.toFixed(2)} [${exp.category}]</span><small>${exp.date}</small>
       <div class='expense-actions'>
         <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${index})'>
         <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${index})'>
