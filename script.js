@@ -49,7 +49,7 @@ function renderExpenses() {
   document.getElementById('empty-state').style.display=expenses.length?'none':'block';
 }
 
-/ Funzione per ottenere la data di oggi in formato YYYY-MM-DD
+// Funzione per ottenere la data di oggi in formato YYYY-MM-DD
 function todayISO() {
    const d = new Date();
    return d.toISOString().split('T')[0];
