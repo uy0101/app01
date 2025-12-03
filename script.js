@@ -5,7 +5,7 @@ const list = document.getElementById('expense-list');
 const cancelEditBtn = document.getElementById('cancel-edit');
 const categorySelect = document.getElementById('category');
 const exportLink = document.getElementById('export-csv');
-
+let highlightedIndex = null;
 
 
 categories.forEach(cat => {
@@ -90,6 +90,7 @@ form.addEventListener('submit',e=>{
   document.getElementById('date').value=todayISO();
   document.getElementById('edit-index').value='';
   cancelEditBtn.hidden=true;
+  highlightedIndex = null;
   renderExpenses();
 });
 
