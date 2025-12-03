@@ -36,7 +36,7 @@ function renderExpenses() {
 
     const li=document.createElement('li');
     li.className='expense-item';
-    li.innerHTML=`<span>${exp.desc} - €${exp.amount.toFixed(2)} [${exp.category}]</span>
+    li.innerHTML=`<span>€${exp.amount.toFixed(2)} [${exp.category}]</span>
       <div class='expense-actions'>
         <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${index})'>
         <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${index})'>
@@ -57,7 +57,7 @@ function todayISO() {
 
 form.addEventListener('submit',e=>{
   e.preventDefault();
-  const desc=document.getElementById('desc').value;
+  //const desc=document.getElementById('desc').value;
   const amount=parseFloat(document.getElementById('amount').value);
   const date=document.getElementById('date').value;
   // Imposta la data di default se il campo è vuoto
@@ -68,9 +68,9 @@ form.addEventListener('submit',e=>{
   const editIndex=document.getElementById('edit-index').value;
 
   if(editIndex){
-    expenses[editIndex]={desc,amount,date,category};
+    expenses[editIndex]={amount,date,category};
   }else{
-    expenses.push({desc,amount,date,category});
+    expenses.push({amount,date,category});
   }
   localStorage.setItem('expenses',JSON.stringify(expenses));
   form.reset();
@@ -82,7 +82,7 @@ form.addEventListener('submit',e=>{
 
 function deleteExpense(index){
   const exp=expenses[index];
-  if(confirm(`Confermi l'eliminazione di "${exp.desc}" (€${exp.amount.toFixed(2)} del ${exp.date})?`)){
+  if(confirm(`Confermi l'eliminazione di "${exp.category}" (€${exp.amount.toFixed(2)} del ${exp.date})?`)){
     expenses.splice(index,1);
     localStorage.setItem('expenses',JSON.stringify(expenses));
     renderExpenses();
@@ -91,7 +91,7 @@ function deleteExpense(index){
 
 function editExpense(index){
   const exp=expenses[index];
-  document.getElementById('desc').value=exp.desc;
+  //document.getElementById('desc').value=exp.desc;
   document.getElementById('amount').value=exp.amount;
   document.getElementById('date').value=exp.date;
   categorySelect.value=exp.category;
@@ -109,9 +109,9 @@ cancelEditBtn.addEventListener('click',()=>{
 exportLink.addEventListener('click',e=>{
   e.preventDefault();
   if(expenses.length===0){alert('Nessuna spesa da esportare');return;}
-  let csv='Descrizione,Importo,Data,Categoria';
+  let csv='Importo,Data,Categoria';
   expenses.forEach(exp=>{
-    csv+=`${exp.desc},${exp.amount},${exp.date},${exp.category}`;
+    csv+=`${exp.amount},${exp.date},${exp.category}`;
   });
   const blob=new Blob([csv],{type:'text/csv'});
   const url=URL.createObjectURL(blob);
