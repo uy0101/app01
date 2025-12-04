@@ -32,15 +32,15 @@ function renderExpenses() {
   const currentMonth = today.slice(0,7);
   let n = expenses.length;
 
-
-  // Copia e ordina per data: più recente in alto
-  const sorted = expenses.slice().sort((a, b) => {
-    //  'a.date' e 'b.date' devono essere  stringhe parsabili (idealmente ISO 'YYYY-MM-DD')
-    const da = new Date(a.date);
-    const db = new Date(b.date);
-    return da - db; // decrescente
-  });
-
+  if (n >0 ) {
+      // Copia e ordina per data: più recente in alto
+      const sorted = expenses.slice().sort((a, b) => {
+      //  'a.date' e 'b.date' devono essere  stringhe parsabili (idealmente ISO 'YYYY-MM-DD')
+      const da = new Date(a.date);
+      const db = new Date(b.date);
+      return da - db; // decrescente
+      });
+  }
   
   sorted.slice().reverse().forEach((exp, index) => {
   //expenses.forEach((exp,index)=>{
