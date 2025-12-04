@@ -38,7 +38,7 @@ function renderExpenses() {
     //  'a.date' e 'b.date' devono essere  stringhe parsabili (idealmente ISO 'YYYY-MM-DD')
     const da = new Date(a.date);
     const db = new Date(b.date);
-    return db - da; // decrescente
+    return da - db; // decrescente
   });
 
   
