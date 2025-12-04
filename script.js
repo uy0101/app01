@@ -45,8 +45,8 @@ function renderExpenses() {
                   </span><br>
                   <small class="expense-date">${exp.date || ''}</small>
       <div class='expense-actions'>
-        <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${index})'>
-        <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${index})'>
+        <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${originalIndex})'>
+        <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${originalIndex})'>
       </div>`;
     
     // Evidenzia se è la riga in modifica
