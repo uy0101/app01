@@ -32,18 +32,15 @@ function renderExpenses() {
   const currentMonth = today.slice(0,7);
   let n = expenses.length;
 
-  if (n >0 ) {
-      // Copia e ordina per data: più recente in alto
-      const sorted = expenses.slice().sort((a, b) => {
-      //  'a.date' e 'b.date' devono essere  stringhe parsabili (idealmente ISO 'YYYY-MM-DD')
-      const da = new Date(a.date);
-      const db = new Date(b.date);
-      return db - da; // decrescente
-      });
-  } else {
-     const sorted = expenses ;
-  }
-  sorted.slice().forEach((exp, index) => {
+  
+  // Copia e ordina per data: più recente in alto
+  const sorted = expenses.slice().sort((a, b) => {
+  //  'a.date' e 'b.date' devono essere  stringhe parsabili (idealmente ISO 'YYYY-MM-DD')
+  const da = new Date(a.date || '1970-01-01' );
+  const db = new Date(b.date || '1970-01-01' );
+  return db - da; // decrescente
+  });
+   sorted.slice().forEach((exp, index) => {
   //expenses.forEach((exp,index)=>{
     let originalIndex = n - 1 - index;  // mappa indice visualizzato -> indice nell’array originale
     if(exp.date===today) dailyTotal+=exp.amount;
