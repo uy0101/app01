@@ -31,8 +31,18 @@ function renderExpenses() {
   const today = todayISO();
   const currentMonth = today.slice(0,7);
   let n = expenses.length;
+
+
+  // Copia e ordina per data: più recente in alto
+  const sorted = expenses.slice().sort((a, b) => {
+    //  'a.date' e 'b.date' devono essere  stringhe parsabili (idealmente ISO 'YYYY-MM-DD')
+    const da = new Date(a.date);
+    const db = new Date(b.date);
+    return db - da; // decrescente
+  });
+
   
-  expenses.slice().reverse().forEach((exp, index) => {
+  sorted.slice().reverse().forEach((exp, index) => {
   //expenses.forEach((exp,index)=>{
     let originalIndex = n - 1 - index;  // mappa indice visualizzato -> indice nell’array originale
     if(exp.date===today) dailyTotal+=exp.amount;
@@ -41,8 +51,7 @@ function renderExpenses() {
     const li=document.createElement('li');
     li.dataset.index = String(originalIndex);
     li.className='expense-item';
-    li.innerHTML=`<span>€${exp.amount.toFixed(2)} [${exp.category}]
-                  </span><br>
+    li.innerHTML=`<span class="expense-title">€${exp.amount.toFixed(2)} [${exp.category}]</span>
                   <small class="expense-date">${exp.date || ''}</small>
       <div class='expense-actions'>
         <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${originalIndex})'>
