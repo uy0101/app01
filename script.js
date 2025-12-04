@@ -50,7 +50,7 @@ function renderExpenses() {
       </div>`;
     
     // Evidenzia se è la riga in modifica
-    if (index === highlightedIndex) {
+    if (originalIndex === highlightedIndex) {
       li.classList.add('editing');
     }
 
