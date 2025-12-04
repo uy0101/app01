@@ -40,8 +40,8 @@ function renderExpenses() {
       const db = new Date(b.date);
       return db - da; // decrescente
       });
-  }else {
-     const sorted =expenses
+  } else {
+     const sorted = expenses ;
   }
   sorted.slice().forEach((exp, index) => {
   //expenses.forEach((exp,index)=>{
