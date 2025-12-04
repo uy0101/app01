@@ -38,11 +38,12 @@ function renderExpenses() {
       //  'a.date' e 'b.date' devono essere  stringhe parsabili (idealmente ISO 'YYYY-MM-DD')
       const da = new Date(a.date);
       const db = new Date(b.date);
-      return da - db; // decrescente
+      return db - da; // decrescente
       });
+  }else {
+     const sorted =expenses
   }
-  
-  sorted.slice().reverse().forEach((exp, index) => {
+  sorted.slice().forEach((exp, index) => {
   //expenses.forEach((exp,index)=>{
     let originalIndex = n - 1 - index;  // mappa indice visualizzato -> indice nell’array originale
     if(exp.date===today) dailyTotal+=exp.amount;
