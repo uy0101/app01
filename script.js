@@ -49,13 +49,13 @@ function renderExpenses() {
     if(exp.date.startsWith(currentMonth)) monthlyTotal+=exp.amount;
 
     const li=document.createElement('li');
-    li.dataset.index = String(originalIndex);
+    li.dataset.index = String(index);
     li.className='expense-item';
     li.innerHTML=`<span class="expense-title">€${exp.amount.toFixed(2)} [${exp.category}]</span>
                   <small class="expense-date">${exp.date || ''}</small>
       <div class='expense-actions'>
-        <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${originalIndex})'>
-        <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${originalIndex})'>
+        <img src='assets/icons/edit.svg' alt='Edit' onclick='editExpense(${index})'>
+        <img src='assets/icons/delete.svg' alt='Delete' onclick='deleteExpense(${index})'>
       </div>`;
     
     // Evidenzia se è la riga in modifica
