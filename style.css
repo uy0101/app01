@@ -13,7 +13,24 @@ button:hover { background: #1e40af; }
     max-height: 400px; /* o quello che preferisci */
     overflow-y: auto;
 }
+
+
+
+
 .expense-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: .8rem; margin-bottom: .5rem; border-radius: 6px; }
+/* Contenuto della riga: due linee verticali */
+.expense-content {
+  display: flex;
+  flex-direction: column;  /* forza la disposizione su due righe */
+  gap: 2px;                /* piccolo distanziamento */
+}
+
+/* La data in piccolo e grigio */
+.expense-date {
+  display: block;          /* assicura l'andata a capo */
+  font-size: 0.85em;
+  color: #666;
+}
 .expense-actions img { width: 24px; height: 24px; cursor: pointer; margin-left: 8px; }
 .empty-state { text-align: center; color: #666; margin-top: 1rem; }
 .app-footer { text-align: center; padding: 1rem; color: #555; }
