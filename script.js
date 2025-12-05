@@ -40,7 +40,8 @@ function renderExpenses() {
   const db = new Date(b.date || '1970-01-01' );
   return db - da; // decrescente
   });
-   sorted.slice().forEach((exp, index) => {
+  
+  sorted.slice().forEach((exp, index) => {
   //expenses.forEach((exp,index)=>{
     let originalIndex = n - 1 - index;  // mappa indice visualizzato -> indice nell’array originale
     if(exp.date===today) dailyTotal+=exp.amount;
@@ -77,6 +78,7 @@ function todayISO() {
    return d.toISOString().split('T')[0];
 }
 
+//commit changes
 form.addEventListener('submit',e=>{
   e.preventDefault();
   //const desc=document.getElementById('desc').value;
