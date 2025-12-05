@@ -43,7 +43,7 @@ function renderExpenses() {
   
   sorted.slice().forEach((exp, index) => {
   //expenses.forEach((exp,index)=>{
-    let originalIndex = n - 1 - index;  // mappa indice visualizzato -> indice nell’array originale
+    let originalIndex = exp.key;
     if(exp.date===today) dailyTotal+=exp.amount;
     if(exp.date.startsWith(currentMonth)) monthlyTotal+=exp.amount;
 
@@ -65,7 +65,7 @@ function renderExpenses() {
 
     list.appendChild(li);
   });
-
+ 
   document.getElementById('daily-total').textContent='€ '+dailyTotal.toFixed(2);
   document.getElementById('monthly-total').textContent='€ '+monthlyTotal.toFixed(2);
   document.getElementById('empty-state').style.display=expenses.length?'none':'block';
@@ -97,6 +97,17 @@ form.addEventListener('submit',e=>{
         return;
     }
 
+
+
+  
+   const recordIndex = expenses.findIndex(record => record.key === editIndex);
+   if (recordIndex !== -1) {
+   
+   } 
+   else{
+    return;
+  }
+  
   if(editIndex){
     expenses[editIndex]={amount,date,category};
   }else{
