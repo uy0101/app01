@@ -1,3 +1,195 @@
+
+// ======== CONFIG: aggiorna gli ID se diversi nel tuo index.html ========
+const FORM_ID = 'expense-form';
+const AMOUNT_ID = 'amount';
+const DATE_ID = 'date';
+const CATEGORY_ID = 'category';
+const DESCRIPTION_ID = 'description';
+const LIST_ID = 'list';
+const LS_KEY = 'expenses';
+
+// ======== UTILS ========
+const $ = (sel) => document.getElementById(sel) || document.querySelector(`[name="${sel}"]`);
+const toNumber = (v) => {
+  const n = Number.parseFloat(String(v).replace(',', '.'));
+  return Number.isFinite(n) ? n : NaN;
+};
+const todayISO = () => new Date().toISOString().slice(0,10); // 'YYYY-MM-DD'
+const toEpoch = (yyyyMMdd) => {
+  // Se yyyyMMdd mancante o invalida => oggi
+  if (!yyyyMMdd || !/^\d{4}-\d{2}-\d{2}$/.test(yyyyMMdd)) return Date.now();
+  const [y,m,d] = yyyyMMdd.split('-').map(Number);
+  // Costruiamo a mezzogiorno per evitare edge timezone
+  return new Date(Date.UTC(y, m-1, d, 12, 0, 0, 0)).getTime();
+};
+const uuid = () => (crypto?.randomUUID ? crypto.randomUUID() : `id_${Date.now()}_${Math.random().toString(16).slice(2)}`);
+
+// ======== STORAGE LAYER ========
+function readExpenses() {
+  // MDN: getItem -> null se chiave assente; gestiamo null/JSON non valido in modo sicuro
+  // https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem
+  const raw = localStorage.getItem(LS_KEY); // può essere null al primo avvio [1](https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem)
+  if (raw === null) return []; // nessun dato salvato
+  try {
+    const parsed = JSON.parse(raw); // JSON.parse(null) -> null; JSON.parse('') lancia eccezione [2](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse)[3](https://stackoverflow.com/questions/74914978/why-does-json-parsenull-return-null)[4](https://sqlpey.com/javascript/resolved-why-does-json-parse-fail-when-given-an-empty-string/)
+    // Normalizziamo: ci aspettiamo un array; qualunque altra cosa -> []
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    console.warn('[expenses] JSON corrotto in LS, resetto a []');
+    return [];
+  }
+}
+
+function saveExpenses(list) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.error('Impossibile salvare su localStorage:', e);
+    alert('Errore: spazio di archiviazione esaurito o bloccato.');
+  }
+}
+
+// ======== DOMAIN MODEL ========
+function normalizeExpense(obj) {
+  // Garantiamo proprietà sempre presenti e tipi coerenti
+  const amount = toNumber(obj?.amount);
+  const category = (obj?.category ?? 'Other').trim() || 'Other';
+  const description = (obj?.description ?? '').trim();
+  const date = (obj?.date ?? todayISO()); // stringa 'YYYY-MM-DD'
+  const ts = Number.isFinite(obj?.ts) ? obj.ts : toEpoch(date);
+
+  return {
+    id: obj?.id ?? uuid(),
+    amount,           // number
+    category,         // string
+    description,      // string
+    date,             // 'YYYY-MM-DD'
+    ts                // epoch ms per ordinamento
+  };
+}
+
+function validateExpenseFields({ amount, date }) {
+  if (!Number.isFinite(amount) || amount <= 0) {
+    throw new Error('Inserisci un importo numerico maggiore di zero.');
+  }
+  if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    throw new Error('Inserisci una data valida (YYYY-MM-DD).');
+  }
+}
+
+// ======== RENDER ========
+function renderExpenses(expenses) {
+  const listEl = $(LIST_ID);
+  if (!listEl) return;
+
+  // Ordinamento per data: dal più recente al più vecchio
+  const sorted = expenses.slice().sort((a, b) => b.ts - a.ts);
+
+  // Svuota e ricostruisci
+  listEl.innerHTML = '';
+  if (sorted.length === 0) {
+    listEl.innerHTML = '<li>Nessuna spesa</li>';
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  for (const e of sorted) {
+    // Difese: e può essere undefined se qualcuno ha manipolato LS a mano
+    if (!e || typeof e.amount === 'undefined') continue;
+
+    const li = document.createElement('li');
+    li.dataset.id = e.id;
+    li.innerHTML = `
+      <strong>${e.category}</strong> — 
+      <span>${e.description ? e.description + ' — ' : ''}</span>
+      <span>${e.amount.toFixed(2)} €</span>
+      <small style="opacity:.7">(${e.date})</small>
+      <button data-action="delete" aria-label="Eliminai);
+  }
+  listEl.appendChild(frag);
+}
+
+// ======== CONTROLLER ========
+function addExpenseFromForm() {
+  const amountEl = $(AMOUNT_ID);
+  const dateEl = $(DATE_ID);
+  const categoryEl = $(CATEGORY_ID);
+  const descriptionEl = $(DESCRIPTION_ID);
+
+  // Guardie contro elementi mancanti (evita il crash "reading 'amount'")
+  if (!amountEl) { alert('Campo "amount" non trovato nel DOM.'); throw new Error('amount element missing'); }
+
+  const candidate = {
+    amount: toNumber(amountEl.value),
+    date: (dateEl?.value || todayISO()),
+    category: categoryEl?.value ?? 'Other',
+    description: descriptionEl?.value ?? ''
+  };
+
+  validateExpenseFields(candidate); // lancia con messaggio chiaro se invalido
+
+  const expenses = readExpenses();
+  const normalized = normalizeExpense(candidate);
+  expenses.push(normalized);
+  saveExpenses(expenses);
+  renderExpenses(expenses);
+}
+
+function deleteExpense(id) {
+  const expenses = readExpenses();
+  const next = expenses.filter(e => e?.id !== id);
+  saveExpenses(next);
+  renderExpenses(next);
+}
+
+function wireEvents() {
+  const form = $(FORM_ID);
+  if (!form) {
+    console.error(`Form con id/name "${FORM_ID}" non trovato. Nessun salvataggio possibile.`);
+    return;
+  }
+
+  // Primo submit: con queste guardie SALVA sempre o mostra errore leggibile
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    try {
+      addExpenseFromForm();
+      form.reset();
+      $(AMOUNT_ID)?.focus();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Errore durante l\'aggiunta della spesa.');
+    }
+  });
+
+  // Delegazione per pulsanti elimina nella lista
+  const listEl = $(LIST_ID);
+  if (listEl) {
+    listEl.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('button[data-action="delete"]');
+      if (!btn) return;
+      const li = btn.closest('li');
+      const id = li?.dataset?.id;
+      if (!id) return;
+      if (confirm('Confermi l’eliminazione della spesa?')) deleteExpense(id);
+    });
+  }
+}
+
+// ======== BOOT ========
+document.addEventListener('DOMContentLoaded', () => {
+  // Migrazione/normalizzazione eventuali dati esistenti
+  const current = readExpenses().map(normalizeExpense);
+  saveExpenses(current);
+  renderExpenses(current);
+  wireEvents();
+});
+
+
+
+
+/* OLD FILE
+
 // Hardcoded categories
 const categories = ['Food','Transport','Utilities','Other'];
 const form = document.getElementById('expense-form');
@@ -181,3 +373,8 @@ exportLink.addEventListener('click',e=>{
 });
 
 renderExpenses();
+
+*/ OLD FILE
+
+
+
